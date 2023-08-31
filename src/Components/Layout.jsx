@@ -9,8 +9,9 @@ const Layout = () => {
       <Header />
       <div className="flex relative w-full h-full">
         <Sidebar />
-
-        <Outlet />
+        <div className="ml-10 mt-20 grid items-center w-full h-full justify-center">
+          <Outlet />
+        </div>
       </div>
       <Footer />
     </div>

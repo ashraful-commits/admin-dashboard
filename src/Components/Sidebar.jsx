@@ -14,7 +14,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`h-[90vh]  left-0 transition-all duration-200 overflow-hidden bg-blue-300 w-100% ${
+      className={`h-full fixed top-[5%] z-[9999] left-0 transition-all min-h-screen duration-200 overflow-hidden bg-blue-300 w-100% ${
         sidebar
           ? "w-[50px]  md:w-[50px] lg:w-[50px]"
           : "w-[300px] md:w-[300px] lg:w-[250px] "

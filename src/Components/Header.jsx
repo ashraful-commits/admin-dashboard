@@ -4,7 +4,7 @@ import { AiFillBell } from "react-icons/ai";
 
 const Header = () => {
   return (
-    <div className="w-full px-4 py-2 flex justify-between bg-orange-200 items-center">
+    <div className="w-full fixed z-[9999] top-0 left-0 px-4 py-2 flex justify-between bg-orange-200 items-center">
       <div className="logo w-[20%] flex gap-5  justify-between ">
         <img className="w-[30px] shrink-0 h-[30px]" src={logo} alt="Logo" />
       </div>
