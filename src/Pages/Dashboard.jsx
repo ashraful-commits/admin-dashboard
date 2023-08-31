@@ -83,7 +83,7 @@ const Dashboard = () => {
                 </select>
               </div>
             </div>
-            <div className="Chart grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+            <div className="Chart grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
               <div className="areaChart ">
                 <AreaChartComponent />
               </div>

@@ -21,7 +21,7 @@ const data = [
 
 const AreaChartComponent = () => {
   return (
-    <div>
+    <div className="shadow-md h-full p-5">
       <h2 className="text-2xl font-semibold">Area Chart</h2>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data}>
@@ -29,7 +29,7 @@ const AreaChartComponent = () => {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" />
+          <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="blue" />
         </AreaChart>
       </ResponsiveContainer>
     </div>

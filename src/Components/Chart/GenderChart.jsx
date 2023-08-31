@@ -2,16 +2,16 @@ import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 const data = [
-  { gender: "Male", count: 300, color: "#8884d8" },
-  { gender: "Female", count: 450, color: "#82ca9d" },
-  { gender: "Non-Binary", count: 50, color: "#ffc658" },
+  { gender: "Male", count: 300, color: "#3490de" }, // Bright blue
+  { gender: "Female", count: 450, color: "#e74c3c" }, // Bright red
+  { gender: "Non-Binary", count: 50, color: "#f39c12" }, // Bright yellow
 ];
 
 const COLORS = data.map((entry) => entry.color);
 
 const GenderChart = () => {
   return (
-    <div className="w-full max-w-screen-lg mx-auto p-6">
+    <div className="w-full max-w-screen-lg shadow-md h-full rounded-lg mx-auto p-6">
       <h2 className="text-2xl font-semibold mb-4">
         Audience Gender Distribution
       </h2>
