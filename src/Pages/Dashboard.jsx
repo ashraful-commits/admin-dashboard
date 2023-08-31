@@ -1,4 +1,5 @@
 import { AiFillEye, AiOutlineUser } from "react-icons/ai";
+
 import {
   FaFacebook,
   FaHandshake,
@@ -13,6 +14,11 @@ import {
 import DashbordCard from "../Components/cards/DashbordCard";
 import { useAllUsersQuery } from "../features/UserSlice";
 import user from "../../public/user.jpg";
+
+import AreaChartComponent from "../Components/Chart/AreaChart";
+import AgeSplitChart from "../Components/Chart/AgeSplitChart";
+import GenderChart from "../Components/Chart/GenderChart";
+import LocationMapChart from "../Components/Chart/LocationChart";
 const Dashboard = () => {
   const { data, isError, isLoading, isSuccess, error } = useAllUsersQuery();
   if (isLoading) {
@@ -51,6 +57,58 @@ const Dashboard = () => {
               persent={1.5}
             />
           </div>
+          <div className="mt-5 bg-white p-5 rounded-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+              <h1 className="font-bold">Marketing Performence</h1>
+
+              <div className="grid justify-end grid-cols-2 gap-2 md:grid-cols-2 lg:grid-cols-2">
+                <select className="border border-blue-400" id="">
+                  <option className="w-full" value="">
+                    <FaFacebook /> Facebook
+                  </option>
+                  <option className="w-full" value="">
+                    <FaInstagram /> Instagram
+                  </option>
+                  <option className="w-full" value="">
+                    <FaLinkedin /> LinkedIn
+                  </option>
+                  <option className="w-full" value="">
+                    <FaTwitter /> Twitter
+                  </option>
+                </select>
+                <select className="border border-blue-400" name="" id="">
+                  <option value="">Monthly</option>
+                  <option value="">Weekly</option>
+                  <option value="">Yearly</option>
+                </select>
+              </div>
+            </div>
+            <div className="Chart grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+              <div className="areaChart ">
+                <AreaChartComponent />
+              </div>
+              <div className="areaChart ">
+                <AgeSplitChart />
+              </div>
+              <div className="areaChart ">
+                <GenderChart />
+              </div>
+              <div className="areaChart ">
+                <LocationMapChart
+                  data={[
+                    {
+                      id: 1,
+                      name: "North",
+                      lat: 40.7128,
+                      lng: -74.006,
+                      count: 250,
+                    },
+                    // Other location objects
+                  ]}
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <div className=" w-full grid content-start gap-5  ">
           <div className="bg-white grid text-center justify-center w-full rounded-2xl p-5">
@@ -60,7 +118,7 @@ const Dashboard = () => {
               <FaLocationArrow />
               Location
             </p>
-            <div className="grid grid-cols-1 mt-5 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-2 mt-5 md:grid-cols-2 lg:grid-cols-3">
               <div className="flex flex-col">
                 <span className="font-bold">15789</span>
                 <span>Post</span>
