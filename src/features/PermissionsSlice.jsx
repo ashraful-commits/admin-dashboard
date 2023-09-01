@@ -41,13 +41,14 @@ const PermissionsSlice = DashboardSlice.enhanceEndpoints({
       invalidatesTags: ["permissions"],
     }),
     updatePermissionStatus: builder.mutation({
-      query: (id) => ({
+      query: ({ id, input }) => ({
         url: `api/v1/permissions/${id}`,
         method: "PATCH",
         credentials: "include",
+        body: input,
       }),
-      providesTags: ["permission"],
-      invalidatesTags: ["permission"],
+      providesTags: ["permissions"],
+      invalidatesTags: ["permissions"],
     }),
   }),
 });

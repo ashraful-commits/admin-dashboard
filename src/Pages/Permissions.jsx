@@ -2,33 +2,62 @@ import {
   useAllpermissionssQuery,
   useCreatepermissionMutation,
   useDeletepermissionMutation,
+  useUpdatePermissionStatusMutation,
   useUpdatepermissionMutation,
 } from "../features/PermissionsSlice";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import useHandleForm from "../hook/useHandleForm";
 import { useState } from "react";
 import Modal from "../Components/Model/Model";
+import swal from "sweetalert";
+import { useUpdateRoleStatusMutation } from "../features/RoleSlice";
+import { Toastify } from "../Helper/Toastify";
 
 const Permissions = () => {
+  //=================================== all state
+  const [show, setShow] = useState(false);
+  const [Id, setId] = useState(false);
+  //=================================== permisson slice loaded
   const { data, isError, error, isLoading, isSuccess } =
     useAllpermissionssQuery();
-
   const [createpermission] = useCreatepermissionMutation();
   const [updatepermission] = useUpdatepermissionMutation();
+  const [updatePermissionStatus] = useUpdatePermissionStatusMutation();
   const [deletepermission] = useDeletepermissionMutation();
   const { input, setInput, handleInput } = useHandleForm({
     name,
   });
-  const [show, setShow] = useState(false);
-  const [Id, setId] = useState(false);
+  //=========================================== handle Edit
   const handleEdit = (id) => {
     setId(id);
     setShow(true);
     setInput({ ...data.permission.find((item) => item._id === id) });
   };
-  const handleDelete = (id) => {
-    deletepermission(id);
+  //=========================================== handle status
+  const handlePermissionStatus = (id, status) => {
+    updatePermissionStatus({ id, input: { status: !status } });
+    Toastify("Permission status updated!", "success");
   };
+  //============================================ handle delete
+  const handleDelete = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this imaginary file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        deletepermission(id);
+        swal("Poof! Your imaginary file has been deleted!", {
+          icon: "success",
+        });
+      } else {
+        swal("Your imaginary file is safe!");
+      }
+    });
+  };
+  //========================================= check permisson data load or not
   let content = "";
   if (isError) {
     content = <h1>{error}</h1>;
@@ -45,7 +74,11 @@ const Permissions = () => {
             <td className="">{item.name}</td>
 
             <td className="">
-              <input type="checkbox" />
+              <input
+                checked={item.status}
+                onChange={() => handlePermissionStatus(item._id, item.status)}
+                type="checkbox"
+              />
             </td>
             <td className=" flex gap-5">
               <button onClick={() => handleEdit(item._id)}>
@@ -64,17 +97,22 @@ const Permissions = () => {
       );
     }
   }
+  //============================================== handle form submit
   const handleForm = (e) => {
     e.preventDefault();
     if (Id) {
       updatepermission({ Id, input: { name: input.name } });
       setId(null);
       setInput({ name: "" });
+      setShow(false);
+    } else {
+      createpermission({ name: input.name });
+      setId(null);
+      setInput({ name: "" });
+      setShow(false);
     }
-    createpermission({ name: input.name });
-    setId(null);
-    setInput({ name: "" });
   };
+  //================================================ main function return
   return (
     <div className=" w-full h-auto flex justify-center">
       {show && (
@@ -112,7 +150,9 @@ const Permissions = () => {
               Permissions Table
             </h1>
             <button
-              onClick={() => setShow(true)}
+              onClick={() => {
+                setShow(true), setInput({ name: "" }, setId(null));
+              }}
               className="bg-blue-500 px-2 py-1 rounded-md hover:bg-blue-600 text-white"
             >
               Add Permission

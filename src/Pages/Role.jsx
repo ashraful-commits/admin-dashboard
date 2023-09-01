@@ -4,11 +4,14 @@ import {
   useCreateRoleMutation,
   useDeleteRoleMutation,
   useUpdateRoleMutation,
+  useUpdateRoleStatusMutation,
 } from "../features/RoleSlice";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import Modal from "../Components/Model/Model";
 import { useAllpermissionssQuery } from "../features/PermissionsSlice";
 import useHandleForm from "../hook/useHandleForm";
+import swal from "sweetalert";
+import { Toastify } from "../Helper/Toastify";
 
 const Role = () => {
   const { input, setInput, handleInput } = useHandleForm({
@@ -16,25 +19,16 @@ const Role = () => {
   });
   const [show, setShow] = useState(false);
   const [permissionField, setPermissionField] = useState([]);
-  console.log(permissionField);
+
   const [Id, setId] = useState(null);
-  console.log(input);
+
+  //=================================== all role slice load
   const { data, isError, error, isLoading, isSuccess } = useAllRolesQuery();
   const [createRole] = useCreateRoleMutation();
   const [updateRole] = useUpdateRoleMutation();
   const [deleteRole] = useDeleteRoleMutation();
-  const handleDelete = (id) => {
-    deleteRole(id);
-  };
-  const handleEdit = (id) => {
-    setId(id);
-    const editdata = data.role.find((item) => item._id === id);
-    setInput({ ...editdata });
-    console.log(editdata);
-    editdata.permissions.map((item) => permissionField.push(item._id));
-    setShow(true);
-  };
-
+  const [updateRoleStatus] = useUpdateRoleStatusMutation();
+  //========================================= permisson slice load
   const {
     data: permissionData,
     isError: isPermissionError,
@@ -42,7 +36,7 @@ const Role = () => {
     isLoading: isPermissionLoading,
     isSuccess: isPermissionSuccess,
   } = useAllpermissionssQuery();
-
+  // =========================================== checkbox handle
   const handleCheckbox = (e) => {
     let updatedPermissions;
 
@@ -55,7 +49,39 @@ const Role = () => {
     }
     setPermissionField(updatedPermissions);
   };
-
+  //=============================================== handle Delete
+  const handleDelete = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this imaginary file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        deleteRole(id);
+        swal("Poof! Your imaginary file has been deleted!", {
+          icon: "success",
+        });
+      } else {
+        swal("Your imaginary file is safe!");
+      }
+    });
+  };
+  //================================================= handleEdit
+  const handleEdit = (id) => {
+    setId(id);
+    const editdata = data.role.find((item) => item._id === id);
+    setInput({ ...editdata });
+    editdata.permissions.map((item) => permissionField.push(item._id));
+    setShow(true);
+  };
+  //================================================= handle status update
+  const handleStatus = (id, status) => {
+    updateRoleStatus({ id, input: { status: !status } });
+    Toastify("Role status updated!", "success");
+  };
+  //============================================== check role data load or not
   let content = "";
   let PermissonContent = "";
   if (isError) {
@@ -73,7 +99,11 @@ const Role = () => {
             <td className="">{item?.name}</td>
 
             <td className="">
-              <input type="checkbox" />
+              <input
+                checked={item.status}
+                onChange={() => handleStatus(item._id, item.status)}
+                type="checkbox"
+              />
             </td>
             <td className=" flex gap-5">
               <button onClick={() => handleEdit(item._id)}>
@@ -92,6 +122,7 @@ const Role = () => {
       );
     }
   }
+  //============================================== check permission data load or not
   if (isPermissionError) {
     PermissonContent = <h1>{permissonError}</h1>;
   }
@@ -113,22 +144,33 @@ const Role = () => {
       );
     });
   }
-
+  //==================================================== handle submit form
   const handleForm = (e) => {
     e.preventDefault();
 
     if (Id) {
+      //=======================update role
       updateRole({
         Id,
         input: { name: input.name, permissions: permissionField },
       });
       setPermissionField([]);
+      setInput({ name: "" });
+      setId(null);
+      Toastify("Role updated!", "success");
+      setShow(false);
     } else {
+      //====================================create role
       createRole({ name: input.name, permissions: [...permissionField] });
       setPermissionField([]);
+      setInput({ name: "" });
+      setId(null);
+      Toastify("Role Created!", "success");
+      setShow(false);
     }
   };
 
+  //========================== main file return
   return (
     <div className=" w-full h-auto flex justify-center">
       {show && (
@@ -168,7 +210,10 @@ const Role = () => {
           <div className="flex justify-between items-center py-5">
             <h1 className=" text-center text-xl font-extrabold">Roles Table</h1>
             <button
-              onClick={() => setShow(true)}
+              onClick={() => {
+                setShow(true),
+                  setInput({ name: "" }, setId(null), setPermissionField([]));
+              }}
               className="bg-blue-500 px-2 py-1 rounded-md hover:bg-blue-600 text-white"
             >
               Add Role

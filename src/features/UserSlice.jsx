@@ -39,10 +39,11 @@ const UserSlice = DashboardSlice.injectEndpoints({
       invalidatesTags: ["users"],
     }),
     updateStatus: builder.mutation({
-      query: (id) => ({
+      query: ({ id, input }) => ({
         url: `api/v1/auth/${id}`,
         method: "PATCH",
         credentials: "include",
+        body: input,
       }),
       providesTags: ["users"],
       invalidatesTags: ["users"],

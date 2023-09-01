@@ -39,14 +39,15 @@ const RoleSlice = DashboardSlice.enhanceEndpoints({
       providesTags: ["roles"],
       invalidatesTags: ["roles"],
     }),
-    updateStatus: builder.mutation({
-      query: (id) => ({
+    updateRoleStatus: builder.mutation({
+      query: ({ id, input }) => ({
         url: `api/v1/role/${id}`,
         method: "PATCH",
         credentials: "include",
+        body: input,
       }),
-      providesTags: "role",
-      invalidatesTags: ["role"],
+      providesTags: "roles",
+      invalidatesTags: ["roles"],
     }),
   }),
 });
@@ -55,5 +56,6 @@ export const {
   useCreateRoleMutation,
   useDeleteRoleMutation,
   useUpdateRoleMutation,
+  useUpdateRoleStatusMutation,
 } = RoleSlice;
 export default RoleSlice;
