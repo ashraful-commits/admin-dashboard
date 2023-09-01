@@ -1,9 +1,12 @@
 import DashboardSlice from "./DashboardSlice";
 
-const RoleSlice = DashboardSlice.injectEndpoints({
+const RoleSlice = DashboardSlice.enhanceEndpoints({
+  addTagTypes: ["roles", "role"],
+}).injectEndpoints({
   endpoints: (builder) => ({
     AllRoles: builder.query({
       query: () => "api/v1/role/",
+      providesTags: ["roles"],
     }),
     singleRole: builder.query({
       query: (id) => `api/v1/role/${id}`,
@@ -14,6 +17,8 @@ const RoleSlice = DashboardSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      providesTags: ["roles"],
+      invalidatesTags: ["roles"],
     }),
     deleteRole: builder.mutation({
       query: (id) => ({
@@ -21,13 +26,18 @@ const RoleSlice = DashboardSlice.injectEndpoints({
         method: "DELETE",
         credentials: "include",
       }),
+      providesTags: ["roles"],
+      invalidatesTags: ["roles"],
     }),
     updateRole: builder.mutation({
-      query: (id) => ({
-        url: `api/v1/role/${id}`,
+      query: ({ Id, input }) => ({
+        url: `api/v1/role/${Id}`,
         method: "PUT",
         credentials: "include",
+        body: input,
       }),
+      providesTags: ["roles"],
+      invalidatesTags: ["roles"],
     }),
     updateStatus: builder.mutation({
       query: (id) => ({
@@ -35,8 +45,15 @@ const RoleSlice = DashboardSlice.injectEndpoints({
         method: "PATCH",
         credentials: "include",
       }),
+      providesTags: "role",
+      invalidatesTags: ["role"],
     }),
   }),
 });
-export const { useAllRolesQuery, useCreateRoleMutation } = RoleSlice;
+export const {
+  useAllRolesQuery,
+  useCreateRoleMutation,
+  useDeleteRoleMutation,
+  useUpdateRoleMutation,
+} = RoleSlice;
 export default RoleSlice;

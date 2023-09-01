@@ -1,17 +1,39 @@
 import { useEffect, useState } from "react";
-import { useAllRolesQuery, useCreateRoleMutation } from "../features/RoleSlice";
+import {
+  useAllRolesQuery,
+  useCreateRoleMutation,
+  useDeleteRoleMutation,
+  useUpdateRoleMutation,
+} from "../features/RoleSlice";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import Modal from "../Components/Model/Model";
 import { useAllpermissionssQuery } from "../features/PermissionsSlice";
 import useHandleForm from "../hook/useHandleForm";
 
 const Role = () => {
-  const { input, handleInput } = useHandleForm({
+  const { input, setInput, handleInput } = useHandleForm({
     name: "",
   });
+  const [show, setShow] = useState(false);
+  const [permissionField, setPermissionField] = useState([]);
+  console.log(permissionField);
+  const [Id, setId] = useState(null);
   console.log(input);
   const { data, isError, error, isLoading, isSuccess } = useAllRolesQuery();
   const [createRole] = useCreateRoleMutation();
+  const [updateRole] = useUpdateRoleMutation();
+  const [deleteRole] = useDeleteRoleMutation();
+  const handleDelete = (id) => {
+    deleteRole(id);
+  };
+  const handleEdit = (id) => {
+    setId(id);
+    const editdata = data.role.find((item) => item._id === id);
+    setInput({ ...editdata });
+    console.log(editdata);
+    editdata.permissions.map((item) => permissionField.push(item._id));
+    setShow(true);
+  };
 
   const {
     data: permissionData,
@@ -20,7 +42,6 @@ const Role = () => {
     isLoading: isPermissionLoading,
     isSuccess: isPermissionSuccess,
   } = useAllpermissionssQuery();
-  const [permissionField, setPermissionField] = useState([]);
 
   const handleCheckbox = (e) => {
     let updatedPermissions;
@@ -32,7 +53,6 @@ const Role = () => {
     } else {
       updatedPermissions = [...permissionField, e.target.value];
     }
-
     setPermissionField(updatedPermissions);
   };
 
@@ -45,26 +65,32 @@ const Role = () => {
     content = <h1 className="text-center my-5 animate-bounce">...Loading</h1>;
   }
   if (isSuccess) {
-    content = data.role?.map((item, index) => {
-      return (
-        <tr key={item?.id} className="bg-white flex  justify-between  p-2">
-          <td className="">{index + 1}</td>
-          <td className="">{item?.name}</td>
+    if (data.role.length > 0) {
+      content = data.role?.map((item, index) => {
+        return (
+          <tr key={item?.id} className="bg-white flex  justify-between  p-2">
+            <td className="">{index + 1}</td>
+            <td className="">{item?.name}</td>
 
-          <td className="">
-            <input type="checkbox" />
-          </td>
-          <td className=" flex gap-5">
-            <span>
-              <AiFillEdit />
-            </span>
-            <span>
-              <AiFillDelete />
-            </span>
-          </td>
-        </tr>
+            <td className="">
+              <input type="checkbox" />
+            </td>
+            <td className=" flex gap-5">
+              <button onClick={() => handleEdit(item._id)}>
+                <AiFillEdit />
+              </button>
+              <button onClick={() => handleDelete(item._id)}>
+                <AiFillDelete />
+              </button>
+            </td>
+          </tr>
+        );
+      });
+    } else {
+      content = (
+        <h1 className="text-center my-5 animate-bounce">data not found</h1>
       );
-    });
+    }
   }
   if (isPermissionError) {
     PermissonContent = <h1>{permissonError}</h1>;
@@ -77,19 +103,32 @@ const Role = () => {
       return (
         <div key={index} className="flex gap-3 items-center">
           <label htmlFor="">{item?.name}</label>
-          <input onChange={handleCheckbox} value={item._id} type="checkbox" />
+          <input
+            onChange={handleCheckbox}
+            checked={permissionField.includes(item._id)}
+            value={item._id}
+            type="checkbox"
+          />
         </div>
       );
     });
   }
-  const [show, setShow] = useState(false);
 
   const handleForm = (e) => {
     e.preventDefault();
 
-    createRole({ name: input.name, permissions: [...permissionField] });
+    if (Id) {
+      updateRole({
+        Id,
+        input: { name: input.name, permissions: permissionField },
+      });
+      setPermissionField([]);
+    } else {
+      createRole({ name: input.name, permissions: [...permissionField] });
+      setPermissionField([]);
+    }
   };
-  useEffect(() => {}, [input]);
+
   return (
     <div className=" w-full h-auto flex justify-center">
       {show && (

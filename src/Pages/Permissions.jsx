@@ -1,6 +1,8 @@
 import {
   useAllpermissionssQuery,
   useCreatepermissionMutation,
+  useDeletepermissionMutation,
+  useUpdatepermissionMutation,
 } from "../features/PermissionsSlice";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import useHandleForm from "../hook/useHandleForm";
@@ -10,10 +12,23 @@ import Modal from "../Components/Model/Model";
 const Permissions = () => {
   const { data, isError, error, isLoading, isSuccess } =
     useAllpermissionssQuery();
+
   const [createpermission] = useCreatepermissionMutation();
-  const { input, handleInput } = useHandleForm({
+  const [updatepermission] = useUpdatepermissionMutation();
+  const [deletepermission] = useDeletepermissionMutation();
+  const { input, setInput, handleInput } = useHandleForm({
     name,
   });
+  const [show, setShow] = useState(false);
+  const [Id, setId] = useState(false);
+  const handleEdit = (id) => {
+    setId(id);
+    setShow(true);
+    setInput({ ...data.permission.find((item) => item._id === id) });
+  };
+  const handleDelete = (id) => {
+    deletepermission(id);
+  };
   let content = "";
   if (isError) {
     content = <h1>{error}</h1>;
@@ -22,35 +37,44 @@ const Permissions = () => {
     content = <h1 className="text-center my-5 animate-bounce">...Loading</h1>;
   }
   if (isSuccess) {
-    content = data.permission?.map((item, index) => {
-      return (
-        <tr key={item.id} className="bg-white flex  justify-between  p-2">
-          <td className="">{index + 1}</td>
-          <td className="">{item.name}</td>
+    if (data.permission.length > 0) {
+      content = data.permission?.map((item, index) => {
+        return (
+          <tr key={item.id} className="bg-white flex  justify-between  p-2">
+            <td className="">{index + 1}</td>
+            <td className="">{item.name}</td>
 
-          <td className="">
-            <input type="checkbox" />
-          </td>
-          <td className=" flex gap-5">
-            <span>
-              <AiFillEdit />
-            </span>
-            <span>
-              <AiFillDelete />
-            </span>
-          </td>
-        </tr>
+            <td className="">
+              <input type="checkbox" />
+            </td>
+            <td className=" flex gap-5">
+              <button onClick={() => handleEdit(item._id)}>
+                <AiFillEdit />
+              </button>
+              <button onClick={() => handleDelete(item._id)}>
+                <AiFillDelete />
+              </button>
+            </td>
+          </tr>
+        );
+      });
+    } else {
+      content = (
+        <h1 className="text-center my-5 animate-bounce">data not found</h1>
       );
-    });
+    }
   }
-
-  const [show, setShow] = useState(false);
-
   const handleForm = (e) => {
     e.preventDefault();
+    if (Id) {
+      updatepermission({ Id, input: { name: input.name } });
+      setId(null);
+      setInput({ name: "" });
+    }
     createpermission({ name: input.name });
+    setId(null);
+    setInput({ name: "" });
   };
-
   return (
     <div className=" w-full h-auto flex justify-center">
       {show && (

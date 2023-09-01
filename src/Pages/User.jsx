@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "../Components/Model/Model";
 import {
   useAllUsersQuery,
   useCreateUserMutation,
   useDeleteUserMutation,
-  useSingleUserQuery,
   useUpdateUserMutation,
 } from "../features/UserSlice";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
@@ -21,8 +20,7 @@ const User = () => {
     role: "",
   });
   const { data, isError, error, isLoading, isSuccess } = useAllUsersQuery();
-  const { data: singleData } = useSingleUserQuery(Id);
-  console.log(singleData);
+  console.log(data);
   const [createUser] = useCreateUserMutation();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
@@ -31,7 +29,7 @@ const User = () => {
   };
   const handleEdit = (id) => {
     setId(id);
-    setInput({ ...singleData.user });
+    setInput({ ...data.user.find((item) => item._id === id) });
     setShow(true);
   };
   const {
@@ -42,7 +40,7 @@ const User = () => {
     isSuccess: isRoleSuccess,
   } = useAllRolesQuery();
 
-  let content = "";
+  let content;
   let Rolecontent = "";
   if (isError) {
     content = <h1>{error}</h1>;
@@ -52,26 +50,32 @@ const User = () => {
     console.log(data);
   }
   if (isSuccess) {
-    content = data.user?.map((item, index) => {
-      return (
-        <tr key={item.id} className="bg-white flex  justify-between  p-2">
-          <td className="">{index + 1}</td>
-          <td className="">{item.name}</td>
-          <td className="">{item.role?.name}</td>
-          <td className="">
-            <input type="checkbox" checked={item.status} />
-          </td>
-          <td className=" flex gap-5">
-            <button onClick={() => handleEdit(item._id)}>
-              <AiFillEdit />
-            </button>
-            <button onClick={() => handDelete(item._id)}>
-              <AiFillDelete />
-            </button>
-          </td>
-        </tr>
+    if (data.user.length > 0) {
+      content = data.user?.map((item, index) => {
+        return (
+          <tr key={item.id} className="bg-white flex justify-between p-2">
+            <td className="">{index + 1}</td>
+            <td className="">{item.name}</td>
+            <td className="">{item.role?.name}</td>
+            <td className="">
+              <input type="checkbox" checked={item.status} />
+            </td>
+            <td className=" flex gap-5">
+              <button onClick={() => handleEdit(item._id)}>
+                <AiFillEdit />
+              </button>
+              <button onClick={() => handDelete(item._id)}>
+                <AiFillDelete />
+              </button>
+            </td>
+          </tr>
+        );
+      });
+    } else {
+      content = (
+        <h1 className="text-center my-5 animate-bounce">data not found</h1>
       );
-    });
+    }
   }
   if (isRoleError) {
     Rolecontent = <h1>{RoleError}</h1>;
@@ -93,8 +97,7 @@ const User = () => {
   const handSubmit = (e) => {
     e.preventDefault();
     if (Id) {
-      updateUser();
-      setId(null);
+      updateUser({ Id, input });
     } else {
       createUser(input);
     }
@@ -133,18 +136,24 @@ const User = () => {
               className="w-full text-sm focus:outline-none"
               type="text"
             />
-            <label htmlFor="" className="w-full text-blue-500">
-              Password
-            </label>
-            <input
-              name="password"
-              value={input.password}
-              onChange={handleInput}
-              autoComplete="off"
-              placeholder="Your password please ?"
-              className="w-full text-sm focus:outline-none"
-              type="password"
-            />
+            {!Id ? (
+              <>
+                <label htmlFor="" className="w-full text-blue-500">
+                  Password
+                </label>
+                <input
+                  name="password"
+                  value={input.password}
+                  onChange={handleInput}
+                  autoComplete="off"
+                  placeholder="Your password please ?"
+                  className="w-full text-sm focus:outline-none"
+                  type="password"
+                />
+              </>
+            ) : (
+              ""
+            )}
             <label htmlFor="" className="w-full text-blue-500">
               Role
             </label>
