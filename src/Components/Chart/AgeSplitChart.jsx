@@ -22,7 +22,9 @@ const AgeSplitChart = () => {
 
   return (
     <div className="w-full max-w-screen-lg mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold mb-4">Audience Age Split</h2>
+      <h2 className="text-sm md:text-lg lg:text-xl font-semibold mb-4">
+        Audience Age Split
+      </h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart layout="vertical" data={data}>
           <CartesianGrid strokeDasharray="3 3" />

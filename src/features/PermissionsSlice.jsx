@@ -38,5 +38,6 @@ const PermissionsSlice = DashboardSlice.injectEndpoints({
     }),
   }),
 });
-export const { useAllpermissionssQuery } = PermissionsSlice;
+export const { useAllpermissionssQuery, useCreatepermissionMutation } =
+  PermissionsSlice;
 export default PermissionsSlice;

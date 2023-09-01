@@ -7,10 +7,11 @@ import {
   AiOutlineDoubleLeft,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import useButton from "../hook/useButton";
+
+import { useState } from "react";
 
 const Sidebar = () => {
-  const { show: sidebar, handleShowMenu: handleSidebar } = useButton();
+  const [sidebar, SetSidebar] = useState(true);
 
   return (
     <div
@@ -21,7 +22,7 @@ const Sidebar = () => {
       }`}
     >
       <div className=" bg-blue-500 flex justify-end  items-center p-2">
-        <button onClick={handleSidebar} className="text-white">
+        <button onClick={() => SetSidebar(!sidebar)} className="text-white">
           {sidebar ? <AiOutlineDoubleRight /> : <AiOutlineDoubleLeft />}
         </button>
       </div>

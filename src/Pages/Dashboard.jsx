@@ -34,7 +34,7 @@ const Dashboard = () => {
     <div className="main grid px-2 w-full ">
       <div className=" p-2 grid grid-cols-2 md:gap-5 lg:gap-5 xl:gap-5 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 justify-between gap-2  ">
         <div className=" w-full md:col-span-3 lg:col-span-3 xl:col-span-3">
-          <div className="card bg-white content-start grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 p-5 rounded-2xl">
+          <div className="card mx-3 bg-white content-start grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 p-2 rounded-2xl">
             <DashbordCard
               number={"10,000"}
               icons={<AiFillEye />}
@@ -57,7 +57,7 @@ const Dashboard = () => {
               persent={1.5}
             />
           </div>
-          <div className="mt-5 bg-white p-5 rounded-2xl">
+          <div className="mt-5 bg-white p-3 m-3  md:p-2 lg:p-5 rounded-2xl">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
               <h1 className="font-bold">Marketing Performence</h1>
 

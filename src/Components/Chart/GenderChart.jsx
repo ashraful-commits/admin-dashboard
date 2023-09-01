@@ -12,7 +12,7 @@ const COLORS = data.map((entry) => entry.color);
 const GenderChart = () => {
   return (
     <div className="w-full max-w-screen-lg shadow-md h-full rounded-lg mx-auto p-6">
-      <h2 className="text-2xl font-semibold mb-4">
+      <h2 className="text-sm md:text-lg lg:text-xl font-semibold mb-4">
         Audience Gender Distribution
       </h2>
       <ResponsiveContainer width="100%" height={300}>

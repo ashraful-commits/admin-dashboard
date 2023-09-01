@@ -38,5 +38,5 @@ const RoleSlice = DashboardSlice.injectEndpoints({
     }),
   }),
 });
-export const { useAllRolesQuery } = RoleSlice;
+export const { useAllRolesQuery, useCreateRoleMutation } = RoleSlice;
 export default RoleSlice;

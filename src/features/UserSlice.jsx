@@ -4,9 +4,11 @@ const UserSlice = DashboardSlice.injectEndpoints({
   endpoints: (builder) => ({
     AllUsers: builder.query({
       query: () => "api/v1/auth/",
+      providesTags: ["users"],
     }),
     singleUser: builder.query({
       query: (id) => `api/v1/auth/${id}`,
+      providesTags: ["user"],
     }),
     createUser: builder.mutation({
       query: (data) => ({
@@ -14,6 +16,7 @@ const UserSlice = DashboardSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      providesTags: ["users"],
       invalidatesTags: ["users"],
     }),
     deleteUser: builder.mutation({
@@ -22,6 +25,8 @@ const UserSlice = DashboardSlice.injectEndpoints({
         method: "DELETE",
         credentials: "include",
       }),
+      providesTags: ["users"],
+      invalidatesTags: ["users"],
     }),
     updateUser: builder.mutation({
       query: (id) => ({
@@ -29,6 +34,8 @@ const UserSlice = DashboardSlice.injectEndpoints({
         method: "PUT",
         credentials: "include",
       }),
+      providesTags: ["users"],
+      invalidatesTags: ["users"],
     }),
     updateStatus: builder.mutation({
       query: (id) => ({
@@ -36,8 +43,17 @@ const UserSlice = DashboardSlice.injectEndpoints({
         method: "PATCH",
         credentials: "include",
       }),
+      providesTags: ["users"],
+      invalidatesTags: ["users"],
     }),
   }),
 });
-export const { useAllUsersQuery } = UserSlice;
+export const {
+  useAllUsersQuery,
+  useCreateUserMutation,
+  useDeleteUserMutation,
+  useUpdateUserMutation,
+  useUpdateStatusMutation,
+  useSingleUserQuery,
+} = UserSlice;
 export default UserSlice;

@@ -22,7 +22,9 @@ const data = [
 const AreaChartComponent = () => {
   return (
     <div className="shadow-md h-full p-5">
-      <h2 className="text-2xl font-semibold">Area Chart</h2>
+      <h2 className=" text-sm md:text-lg lg:text-xl font-semibold">
+        Area Chart
+      </h2>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />

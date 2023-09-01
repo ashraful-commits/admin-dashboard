@@ -15,7 +15,9 @@ const LocationMapChart = ({ data }) => {
 
   return (
     <div className="h-full shadow-md rounded-xl">
-      <h2 className="text-2xl font-semibold my-2">Location Distribution Map</h2>
+      <h2 className="text-sm md:text-lg lg:text-xl font-semibold my-2">
+        Location Distribution Map
+      </h2>
       <div style={mapContainerStyle}>
         <LoadScript googleMapsApiKey="YOUR_API_KEY">
           <GoogleMap

@@ -5,11 +5,11 @@ import Sidebar from "./Sidebar";
 
 const Layout = () => {
   return (
-    <div className="w-screen h-auto bg-gray-200">
+    <div className="w-screen container-fluid h-auto bg-gray-200">
       <Header />
       <div className="flex relative w-full h-full">
         <Sidebar />
-        <div className="ml-10 mt-20 grid items-center w-full h-full justify-center">
+        <div className="pl-10 pt-20 grid  min-h-screen min-w-screen w-full h-full ">
           <Outlet />
         </div>
       </div>
