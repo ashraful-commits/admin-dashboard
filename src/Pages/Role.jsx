@@ -94,22 +94,31 @@ const Role = () => {
     if (data.role.length > 0) {
       content = data.role?.map((item, index) => {
         return (
-          <tr key={item?.id} className="bg-white flex  justify-between  p-2">
-            <td className="">{index + 1}</td>
-            <td className="">{item?.name}</td>
-
-            <td className="">
-              <input
-                checked={item.status}
-                onChange={() => handleStatus(item._id, item.status)}
-                type="checkbox"
-              />
+          <tr key={item?.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
+            <td className="px-4 py-3 sm:px-6 sm:py-4">{index + 1}</td>
+            <td className="px-4 py-3 sm:px-6 sm:py-4">{item?.name}</td>
+            <td className="px-4 py-3 sm:px-6 sm:py-4">
+              <label className="inline-flex items-center">
+                <input
+                  checked={item.status}
+                  onChange={() => handleStatus(item._id, item.status)}
+                  type="checkbox"
+                  className="form-checkbox text-indigo-600 h-5 w-5 sm:h-6 sm:w-6"
+                />
+                <span className="ml-2 text-gray-800">Active</span>
+              </label>
             </td>
-            <td className=" flex gap-5">
-              <button onClick={() => handleEdit(item._id)}>
+            <td className="px-4 py-3 sm:px-6 sm:py-4 space-x-2">
+              <button
+                onClick={() => handleEdit(item._id)}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105"
+              >
                 <AiFillEdit />
               </button>
-              <button onClick={() => handleDelete(item._id)}>
+              <button
+                onClick={() => handleDelete(item._id)}
+                className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105"
+              >
                 <AiFillDelete />
               </button>
             </td>
@@ -207,29 +216,46 @@ const Role = () => {
       )}
       <div className="w-[90%] lg:w-[70%] md:[60%] ">
         <div className=" w-full">
-          <div className="flex justify-between items-center py-5">
-            <h1 className=" text-center text-xl font-extrabold">Roles Table</h1>
-            <button
-              onClick={() => {
-                setShow(true),
-                  setInput({ name: "" }, setId(null), setPermissionField([]));
-              }}
-              className="bg-blue-500 px-2 py-1 rounded-md hover:bg-blue-600 text-white"
-            >
-              Add Role
-            </button>
+          <div className="bg-gradient-to-r mb-5 from-blue-400 via-purple-500 to-pink-400 py-5">
+            <div className="container  mx-auto flex justify-between items-center px-4">
+              <h1 className="text-center text-xl font-extrabold text-white">
+                Roles Table
+              </h1>
+              <button
+                onClick={() => {
+                  setShow(true);
+                  setInput({ name: "" });
+                  setId(null);
+                  setPermissionField([]);
+                }}
+                className="bg-blue-500 px-4 py-2 rounded-md hover:bg-blue-600 text-white"
+              >
+                Add Role
+              </button>
+            </div>
           </div>
-          <table className=" table w-full">
-            <thead className="bg-gradient-to-r  from-blue-400 via-purple-500 to-pink-400 text-white">
-              <tr className="flex justify-between text-center p-2">
-                <th className="">ID</th>
-                <th className="">Name</th>
-                <th className="">Status</th>
-                <th className="">Action</th>
-              </tr>
-            </thead>
-            <tbody>{content}</tbody>
-          </table>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white divide-y divide-gray-200 rounded-lg shadow-md">
+              <thead className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 text-white">
+                <tr>
+                  <th className="px-4 py-3 sm:px-6 sm:py-4 text-left font-medium">
+                    ID
+                  </th>
+                  <th className="px-4 py-3 sm:px-6 sm:py-4 text-left font-medium">
+                    Name
+                  </th>
+                  <th className="px-4 py-3 sm:px-6 sm:py-4 text-left font-medium">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 sm:px-6 sm:py-4 text-left font-medium">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>{content}</tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

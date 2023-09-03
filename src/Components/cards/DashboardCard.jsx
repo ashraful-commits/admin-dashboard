@@ -1,7 +1,7 @@
 import React from "react";
 import { AiOutlineArrowUp } from "react-icons/ai";
 
-const DashbordCard = ({ icons, number, total, persent, style }) => {
+const DashboardCard = ({ icons, number, total, persent, style }) => {
   return (
     <div className="w-full">
       <div
@@ -23,4 +23,4 @@ const DashbordCard = ({ icons, number, total, persent, style }) => {
   );
 };
 
-export default DashbordCard;
+export default DashboardCard;

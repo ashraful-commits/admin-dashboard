@@ -1,21 +1,25 @@
-import React, { useState } from "react";
-import classNames from "classnames";
 import { AiFillCloseCircle } from "react-icons/ai";
 
 const Modal = ({ title, children, setShow }) => {
   const handleClose = () => {
     setShow(false);
   };
+
   return (
-    <div className="container-fluid fixed bg-opacity-90 bg-gray-300 items-center flex justify-center w-screen h-screen top-0 left-0 z-[99999]">
-      <button onClick={handleClose} className="absolute  top-[3%] right-[6%]">
-        <AiFillCloseCircle className="text-2xl text-blue-500" />
-      </button>
-      <div className="card bg-white shadow-lg pb-4 px-4 rounded-xl flex flex-col w-[70vw] md:w-[30vw] lg:w-[20vw] h-auto justify-center items-center">
-        <div className="card-header w-full text-center   bg-blue-500 text-white">
-          <h1 className="font-bold my-1">{title}</h1>
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-filter backdrop-blur-md">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full sm:w-2/3 md:w-1/2 lg:w-1/3 xl:w-1/4">
+        <div className="flex justify-end p-4">
+          <button
+            onClick={handleClose}
+            className="text-gray-600 hover:text-gray-800"
+          >
+            <AiFillCloseCircle className="text-3xl" />
+          </button>
         </div>
-        <div className="card-body w-full px-3">{children}</div>
+        <div className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 p-4">
+          <h1 className="text-2xl font-semibold text-white">{title}</h1>
+        </div>
+        <div className="p-4">{children}</div>
       </div>
     </div>
   );
