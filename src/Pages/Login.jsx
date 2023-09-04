@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiUser, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useHandleForm from "../hook/useHandleForm";
 import { useLoginUserMutation } from "../features/UserSlice";
 
 const Login = () => {
   // State variable for password visibility
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   //=============================== use hooks
   const { input, setInput, handleInput } = useHandleForm({
     name: "",
@@ -23,7 +24,9 @@ const Login = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     loginUser(input);
+    navigate("/");
   };
+  useEffect(() => {}, [navigate]);
   return (
     <div className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 min-h-screen flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 shadow-lg sm:max-w-md mx-10 w-full transform transition-transform hover:scale-105">

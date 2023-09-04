@@ -79,6 +79,12 @@ const UserSlice = DashboardSlice.injectEndpoints({
       providesTags: ["users"], // Tags for cache invalidation
       invalidatesTags: ["users"], // Tags to invalidate when a user's status is updated
     }),
+    userLogout: builder.mutation({
+      query: () => ({
+        url: `api/v1/auth/logout/`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -91,6 +97,7 @@ export const {
   useUpdateStatusMutation,
   useLoginUserMutation,
   useMeQuery,
+  useUserLogoutMutation,
 } = UserSlice;
 
 // Export the UserSlice for setting up Redux store
