@@ -1,6 +1,4 @@
 import DashboardSlice from "./DashboardSlice";
-import Cookies from "js-cookie";
-const Token = Cookies.get("accessToken");
 
 // Create a UserSlice using DashboardSlice.injectEndpoints
 const UserSlice = DashboardSlice.injectEndpoints({
@@ -77,6 +75,8 @@ const UserSlice = DashboardSlice.injectEndpoints({
         url: `api/v1/auth/logout/`,
         method: "POST",
       }),
+      providesTags: ["users"],
+      invalidatesTags: ["users"],
     }),
   }),
 });

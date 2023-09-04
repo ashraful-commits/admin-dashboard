@@ -10,35 +10,41 @@ import useHandleForm from "../hook/useHandleForm";
 import { useState } from "react";
 import Modal from "../Components/Model/Model";
 import swal from "sweetalert";
-
 import { Toastify } from "../Helper/Toastify";
 
+// Permissions component handles permission management.
 const Permissions = () => {
-  //=================================== all state
+  // State for managing the modal
   const [show, setShow] = useState(false);
   const [Id, setId] = useState(false);
-  //=================================== permisson slice loaded
+
+  // Fetch permission data using a query
   const { data, isError, error, isLoading, isSuccess } =
     useAllpermissionssQuery();
   const [createpermission] = useCreatepermissionMutation();
   const [updatepermission] = useUpdatepermissionMutation();
   const [updatePermissionStatus] = useUpdatePermissionStatusMutation();
   const [deletepermission] = useDeletepermissionMutation();
+
+  // State and function for handling form input
   const { input, setInput, handleInput } = useHandleForm({
     name,
   });
-  //=========================================== handle Edit
+
+  // Handle editing a permission
   const handleEdit = (id) => {
     setId(id);
     setShow(true);
     setInput({ ...data.permission.find((item) => item._id === id) });
   };
-  //=========================================== handle status
+
+  // Handle toggling permission status
   const handlePermissionStatus = (id, status) => {
     updatePermissionStatus({ id, input: { status: !status } });
     Toastify("Permission status updated!", "success");
   };
-  //============================================ handle delete
+
+  // Handle deleting a permission
   const handleDelete = (id) => {
     swal({
       title: "Are you sure?",
@@ -57,7 +63,8 @@ const Permissions = () => {
       }
     });
   };
-  //========================================= check permisson data load or not
+
+  // Display different content based on data loading state
   let content = "";
   if (isError) {
     content = <h1>{error}</h1>;
@@ -72,7 +79,7 @@ const Permissions = () => {
           <tr key={item.id} className="bg-white p-2">
             <td className="px-4 py-2 sm:px-6 sm:py-4">{index + 1}</td>
             <td className="px-4 py-2 sm:px-6 sm:py-4">{item.name}</td>
-            <td className="px-4 py-2 sm:px-6 sm:py-4">
+            <td className="px-4 py-2 sm:px-6 sm:py-4 space-x-2">
               <label className="inline-flex items-center">
                 <input
                   onChange={() => handlePermissionStatus(item._id, item.status)}
@@ -88,13 +95,13 @@ const Permissions = () => {
                 onClick={() => handleEdit(item._id)}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
               >
-                <AiFillEdit /> {/* Replace text with icon */}
+                <AiFillEdit />
               </button>
               <button
                 onClick={() => handleDelete(item._id)}
                 className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
               >
-                <AiFillDelete /> {/* Replace text with icon */}
+                <AiFillDelete />
               </button>
             </td>
           </tr>
@@ -102,11 +109,12 @@ const Permissions = () => {
       });
     } else {
       content = (
-        <h1 className="text-center my-5 animate-bounce">data not found</h1>
+        <h1 className="text-center my-5 animate-bounce">Data not found</h1>
       );
     }
   }
-  //============================================== handle form submit
+
+  // Handle form submission
   const handleForm = (e) => {
     e.preventDefault();
     if (Id) {
@@ -121,9 +129,11 @@ const Permissions = () => {
       setShow(false);
     }
   };
-  //================================================ main function return
+
+  // Render the main component content
   return (
     <div className=" w-full h-auto flex justify-center">
+      {/* Display the permission editing modal if 'show' is true */}
       {show && (
         <Modal title="Add Permission" setShow={setShow}>
           <form
@@ -142,7 +152,6 @@ const Permissions = () => {
               className="w-full text-sm focus:outline-none"
               type="text"
             />
-
             <button
               type="submit"
               className="bg-blue-400 text-white py-1 rounded-full hover:bg-blue-600"
@@ -154,6 +163,7 @@ const Permissions = () => {
       )}
       <div className="w-[90%] lg:w-[70%] md:[60%] ">
         <div className=" w-full">
+          {/* Table Header */}
           <div className="bg-gradient-to-r mb-5 from-blue-400 via-purple-500 to-pink-400 py-5">
             <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between px-4">
               <h1 className="text-center text-xl font-extrabold text-white mb-4 sm:mb-0">
@@ -172,6 +182,7 @@ const Permissions = () => {
             </div>
           </div>
 
+          {/* Table */}
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 text-white">

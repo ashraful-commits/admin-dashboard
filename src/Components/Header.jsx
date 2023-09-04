@@ -11,7 +11,8 @@ const Header = () => {
   const [dropdown, setDropdown] = useState(false);
 
   // Mutation to handle user logout.
-  const [userLogout] = useUserLogoutMutation();
+  const [userLogout, { isError, isLoading, error, isSuccess }] =
+    useUserLogoutMutation();
 
   // Query to get the user's data.
   const { data } = useMeQuery();
@@ -26,7 +27,7 @@ const Header = () => {
   };
 
   // Empty useEffect with 'navigate' as a dependency to avoid warning.
-  useEffect(() => {}, [navigate]);
+  useEffect(() => {}, [data]);
 
   return (
     <div className="w-full fixed z-[9999] top-0 left-0 px-4 py-2 flex justify-between bg-orange-200 items-center">

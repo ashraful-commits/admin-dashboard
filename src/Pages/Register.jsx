@@ -1,34 +1,40 @@
 import React, { useState } from "react";
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
-import useHandleForm from "../hook/useHandleForm";
-import { useCreateUserMutation } from "../features/UserSlice";
+import useHandleForm from "../hook/useHandleForm"; // Import a custom hook for handling form input
+import { useCreateUserMutation } from "../features/UserSlice"; // Import a mutation function from a UserSlice
 
 const Register = () => {
   // State variables for password visibility
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  //======================================= import hooks
+
+  // Import the custom hook for handling form input
   const { input, setInput, handleInput } = useHandleForm({
     name: "",
     email: "",
     password: "",
   });
-  //======================================== import user slice
 
+  // Import the createUser mutation function from UserSlice
   const [createUser] = useCreateUserMutation();
+
   // Function to toggle password visibility
   const togglePasswordVisibility = (field) => {
     if (field === "password") {
       setShowPassword(!showPassword);
     }
   };
-  //========================== use navigate
+
+  // Use the "useNavigate" hook from react-router-dom to navigate between routes
   const navigate = useNavigate();
-  //======================================= handle form
+
+  // Handle form submission
   const handleFromSubmit = (e) => {
     e.preventDefault();
+    // Call the createUser mutation function with the input data
     createUser(input);
+    // Navigate to the login page after successful registration
     navigate("/login");
   };
 

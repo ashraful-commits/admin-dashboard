@@ -1,25 +1,24 @@
 import { useState } from "react";
-import Modal from "../Components/Model/Model";
-import swal from "sweetalert";
+import Modal from "../Components/Model/Model"; // Import a custom modal component
+import swal from "sweetalert"; // Import the SweetAlert library for confirmation dialogs
 import {
   useAllUsersQuery,
   useCreateUserMutation,
   useDeleteUserMutation,
   useUpdateStatusMutation,
   useUpdateUserMutation,
-} from "../features/UserSlice";
-
-import { FaEdit, FaTrash } from "react-icons/fa";
-
-import { useAllRolesQuery } from "../features/RoleSlice";
-import useHandleForm from "../hook/useHandleForm";
-import { Toastify } from "../Helper/Toastify";
+} from "../features/UserSlice"; // Import user-related query and mutation functions
+import { FaEdit, FaTrash } from "react-icons/fa"; // Import icons for edit and delete
+import { useAllRolesQuery } from "../features/RoleSlice"; // Import role-related query
+import useHandleForm from "../hook/useHandleForm"; // Import a custom hook for handling form input
+import { Toastify } from "../Helper/Toastify"; // Import a custom toast notification component
 
 const User = () => {
-  //===============================  all state here
+  // State variables for user ID and modal visibility
   const [Id, setId] = useState(null);
   const [show, setShow] = useState(false);
-  //================================ form and toast hook
+
+  // Form input state and handling hook
   const { input, setInput, handleInput } = useHandleForm({
     name: "",
     email: "",
@@ -27,13 +26,14 @@ const User = () => {
     role: "",
   });
 
-  //========================= user slice load
+  // User slice data loading and mutation functions
   const { data, isError, error, isLoading, isSuccess } = useAllUsersQuery();
   const [createUser] = useCreateUserMutation();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
   const [updateStatus] = useUpdateStatusMutation();
-  //============================= role slice load
+
+  // Role slice data loading
   const {
     data: RoleData,
     isError: isRoleError,
@@ -41,7 +41,8 @@ const User = () => {
     isLoading: isRoleLoading,
     isSuccess: isRoleSuccess,
   } = useAllRolesQuery();
-  //============================= handle delete
+
+  // Handle user deletion
   const handDelete = (id) => {
     swal({
       title: "Are you sure?",
@@ -61,19 +62,21 @@ const User = () => {
     });
   };
 
-  //============================ handle edit
+  // Handle user edit
   const handleEdit = (id) => {
     setId(id);
     setInput({ ...data.user.find((item) => item._id === id) });
     setShow(true);
   };
-  //============================ handle status update
+
+  // Handle user status update
   const handleStatus = (id, status) => {
     console.log(status);
     updateStatus({ id, input: { status: !status } });
     Toastify("Status updated", "success");
   };
-  //=================================== user slice check
+
+  // Check user data from the user slice
   let content;
   let Rolecontent = "";
   if (isError) {
@@ -125,7 +128,8 @@ const User = () => {
       );
     }
   }
-  //============================================ role slice check
+
+  // Check role data from the role slice
   if (isRoleError) {
     Rolecontent = <h1>{RoleError}</h1>;
   }
@@ -146,7 +150,8 @@ const User = () => {
       );
     });
   }
-  //==============================form submit
+
+  // Handle form submission
   const handSubmit = (e) => {
     e.preventDefault();
     if (Id) {
@@ -171,7 +176,8 @@ const User = () => {
       });
     }
   };
-  //==================================== return main function
+
+  // Return the main component
   return (
     <div className=" w-full h-auto flex justify-center">
       {show && (

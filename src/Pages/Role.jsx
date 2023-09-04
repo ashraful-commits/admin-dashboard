@@ -7,13 +7,14 @@ import {
   useUpdateRoleStatusMutation,
 } from "../features/RoleSlice";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-import Modal from "../Components/Model/Model";
+import Modal from "../Components/Model/Model"; // Import a custom modal component
 import { useAllpermissionssQuery } from "../features/PermissionsSlice";
-import useHandleForm from "../hook/useHandleForm";
-import swal from "sweetalert";
-import { Toastify } from "../Helper/Toastify";
+import useHandleForm from "../hook/useHandleForm"; // Import a custom hook for handling form input
+import swal from "sweetalert"; // Import a sweetalert library for confirmation dialogs
+import { Toastify } from "../Helper/Toastify"; // Import a custom toast notification component
 
 const Role = () => {
+  // State variables for form input, modal visibility, and selected permissions
   const { input, setInput, handleInput } = useHandleForm({
     name: "",
   });
