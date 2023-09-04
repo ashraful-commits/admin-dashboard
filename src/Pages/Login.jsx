@@ -24,9 +24,8 @@ const Login = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     loginUser(input);
-    navigate("/");
   };
-  useEffect(() => {}, [navigate]);
+
   return (
     <div className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 min-h-screen flex justify-center items-center">
       <div className="bg-white rounded-lg p-6 shadow-lg sm:max-w-md mx-10 w-full transform transition-transform hover:scale-105">

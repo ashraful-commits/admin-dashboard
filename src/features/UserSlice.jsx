@@ -13,15 +13,8 @@ const UserSlice = DashboardSlice.injectEndpoints({
 
     // Query to fetch user data for the authenticated user
     me: builder.query({
-      query: () => ({
-        url: "api/v1/auth/me",
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${Token}`,
-        },
-      }),
+      query: () => "api/v1/auth/me",
       providesTags: ["users"],
-
       invalidatesTags: ["users"], // Tags for caching
     }),
 
