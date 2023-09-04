@@ -1,24 +1,23 @@
 import { useState } from "react";
-import Modal from "../Components/Model/Model"; // Import a custom modal component
-import swal from "sweetalert"; // Import the SweetAlert library for confirmation dialogs
+import Modal from "../Components/Model/Model";
+import swal from "sweetalert";
 import {
   useAllUsersQuery,
   useCreateUserMutation,
   useDeleteUserMutation,
+  useMeQuery,
   useUpdateStatusMutation,
   useUpdateUserMutation,
-} from "../features/UserSlice"; // Import user-related query and mutation functions
-import { FaEdit, FaTrash } from "react-icons/fa"; // Import icons for edit and delete
-import { useAllRolesQuery } from "../features/RoleSlice"; // Import role-related query
-import useHandleForm from "../hook/useHandleForm"; // Import a custom hook for handling form input
-import { Toastify } from "../Helper/Toastify"; // Import a custom toast notification component
+} from "../features/UserSlice";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { useAllRolesQuery } from "../features/RoleSlice";
+import useHandleForm from "../hook/useHandleForm";
+import { Toastify } from "../Helper/Toastify";
 
 const User = () => {
-  // State variables for user ID and modal visibility
   const [Id, setId] = useState(null);
   const [show, setShow] = useState(false);
 
-  // Form input state and handling hook
   const { input, setInput, handleInput } = useHandleForm({
     name: "",
     email: "",
@@ -26,14 +25,13 @@ const User = () => {
     role: "",
   });
 
-  // User slice data loading and mutation functions
   const { data, isError, error, isLoading, isSuccess } = useAllUsersQuery();
   const [createUser] = useCreateUserMutation();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
   const [updateStatus] = useUpdateStatusMutation();
+  const { data: loginUser } = useMeQuery();
 
-  // Role slice data loading
   const {
     data: RoleData,
     isError: isRoleError,
@@ -42,41 +40,37 @@ const User = () => {
     isSuccess: isRoleSuccess,
   } = useAllRolesQuery();
 
-  // Handle user deletion
   const handDelete = (id) => {
     swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this imaginary file!",
+      text: "Once deleted, you will not be able to recover this user!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
         deleteUser(id);
-        swal("Poof! Your imaginary file has been deleted!", {
+        swal("User has been deleted!", {
           icon: "success",
         });
       } else {
-        swal("Your imaginary file is safe!");
+        swal("User is safe!");
       }
     });
   };
 
-  // Handle user edit
   const handleEdit = (id) => {
     setId(id);
-    setInput({ ...data.user.find((item) => item._id === id) });
+    const editdata = data.user.find((item) => item._id === id);
+    setInput({ ...editdata });
     setShow(true);
   };
 
-  // Handle user status update
   const handleStatus = (id, status) => {
-    console.log(status);
     updateStatus({ id, input: { status: !status } });
     Toastify("Status updated", "success");
   };
 
-  // Check user data from the user slice
   let content;
   let Rolecontent = "";
   if (isError) {
@@ -84,7 +78,6 @@ const User = () => {
   }
   if (isLoading) {
     content = <h1 className="text-center my-5 animate-bounce">...Loading</h1>;
-    console.log(data);
   }
   if (isSuccess) {
     if (data.user.length > 0) {
@@ -105,18 +98,18 @@ const User = () => {
                 <span className="ml-2 text-gray-800">Active</span>
               </label>
             </td>
-            <td className="px-4 py-2 sm:px-6 sm:py-4 space-x-2">
+            <td className="px-4 py-2 flex flex-col md:flex-row lg:flex-row justify-center items-center gap-2 sm:px-6 sm:py-4 space-x-2">
               <button
                 onClick={() => handleEdit(item._id)}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
               >
-                <FaEdit /> {/* Replace text with icon */}
+                <FaEdit />
               </button>
               <button
                 onClick={() => handDelete(item._id)}
                 className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
               >
-                <FaTrash /> {/* Replace text with icon */}
+                <FaTrash />
               </button>
             </td>
           </tr>
@@ -124,18 +117,16 @@ const User = () => {
       });
     } else {
       content = (
-        <h1 className="text-center my-5 animate-bounce">data not found</h1>
+        <h1 className="text-center my-5 animate-bounce">Data not found</h1>
       );
     }
   }
 
-  // Check role data from the role slice
   if (isRoleError) {
     Rolecontent = <h1>{RoleError}</h1>;
   }
   if (isRoleLoading) {
     Rolecontent = <h1>...Loading</h1>;
-    console.log(data);
   }
   if (isRoleSuccess) {
     Rolecontent = RoleData.role?.map((item, index) => {
@@ -151,7 +142,6 @@ const User = () => {
     });
   }
 
-  // Handle form submission
   const handSubmit = (e) => {
     e.preventDefault();
     if (Id) {
@@ -177,9 +167,8 @@ const User = () => {
     }
   };
 
-  // Return the main component
   return (
-    <div className=" w-full h-auto flex justify-center">
+    <div className="w-full h-auto flex justify-center">
       {show && (
         <Modal title="Add User" setShow={setShow}>
           <form
@@ -187,11 +176,11 @@ const User = () => {
             action=""
             className="flex flex-col gap-2 mt-5"
           >
-            <label htmlFor="" className="w-full text-blue-500">
+            <label htmlFor="name" className="text-blue-500">
               Name
             </label>
             <input
-              placeholder="Your name please ?"
+              placeholder="Your name please?"
               name="name"
               value={input.name}
               onChange={handleInput}
@@ -199,7 +188,7 @@ const User = () => {
               className="w-full text-sm focus:outline-none"
               type="text"
             />
-            <label htmlFor="" className="w-full text-blue-500">
+            <label htmlFor="email" className="text-blue-500">
               Email
             </label>
             <input
@@ -207,13 +196,13 @@ const User = () => {
               value={input.email}
               onChange={handleInput}
               autoComplete="off"
-              placeholder="Your email please ?"
+              placeholder="Your email please?"
               className="w-full text-sm focus:outline-none"
               type="text"
             />
             {!Id ? (
               <>
-                <label htmlFor="" className="w-full text-blue-500">
+                <label htmlFor="password" className="text-blue-500">
                   Password
                 </label>
                 <input
@@ -221,7 +210,7 @@ const User = () => {
                   value={input.password}
                   onChange={handleInput}
                   autoComplete="off"
-                  placeholder="Your password please ?"
+                  placeholder="Your password please?"
                   className="w-full text-sm focus:outline-none"
                   type="password"
                 />
@@ -229,12 +218,12 @@ const User = () => {
             ) : (
               ""
             )}
-            <label htmlFor="" className="w-full text-blue-500">
+            <label htmlFor="role" className="text-blue-500">
               Role
             </label>
             <select
               name="role"
-              value={input.role._id}
+              value={input?.role?._id}
               onChange={handleInput}
               className="focus:outline-none"
             >
@@ -251,8 +240,25 @@ const User = () => {
         </Modal>
       )}
 
-      <div className="w-[90%] lg:w-[70%] md:[60%] ">
-        <div className=" w-full">
+      <div className="w-full flex gap-10 flex-col md:flex-row lg:flex-row lg:w-3/4 md:w-2/3 mx-auto">
+        <div className="w-full md:w-1/2 lg:w-1/3">
+          <div className="profile-container p-4 border rounded-lg mt-4 bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 text-white">
+            <h1 className="text-xl font-semibold mb-4">User Details</h1>
+            <div className="mb-2">
+              <p>
+                <strong>Name:</strong> {loginUser.user.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {loginUser.user.email}
+              </p>
+              {/* Add more user details here */}
+            </div>
+            {/* You can add more colorful elements or styles as needed */}
+          </div>
+
+          {/* Render user details based on the selected user ID */}
+        </div>
+        <div className="w-full">
           <div className="bg-gradient-to-r mb-5 from-blue-400 via-purple-500 to-pink-400 py-5">
             <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between px-4">
               <h1 className="text-center text-xl font-extrabold text-white mb-4 sm:mb-0">
@@ -275,7 +281,6 @@ const User = () => {
               </button>
             </div>
           </div>
-
           <div className="overflow-x-auto">
             <div className="w-full overflow-hidden">
               <table className="w-full divide-y divide-gray-200">

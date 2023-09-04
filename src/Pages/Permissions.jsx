@@ -73,8 +73,8 @@ const Permissions = () => {
     content = <h1 className="text-center my-5 animate-bounce">...Loading</h1>;
   }
   if (isSuccess) {
-    if (data.permission.length > 0) {
-      content = data.permission?.map((item, index) => {
+    if (data?.permissions.length > 0) {
+      content = data?.permissions?.map((item, index) => {
         return (
           <tr key={item.id} className="bg-white p-2">
             <td className="px-4 py-2 sm:px-6 sm:py-4">{index + 1}</td>
@@ -90,7 +90,7 @@ const Permissions = () => {
                 <span className="ml-2 text-gray-800">Active</span>
               </label>
             </td>
-            <td className="px-4 py-2 sm:px-6 sm:py-4 space-x-2">
+            <td className="px-4 flex py-2 sm:px-6 sm:py-4 space-x-2">
               <button
                 onClick={() => handleEdit(item._id)}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md"

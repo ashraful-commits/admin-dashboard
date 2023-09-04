@@ -3,7 +3,8 @@ import logo from "../../public/devloper ashraful.png";
 import user from "../../public/user.jpg";
 import { AiFillBell } from "react-icons/ai";
 import { useMeQuery, useUserLogoutMutation } from "../features/UserSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
 
 // Header component responsible for displaying the website's header.
 const Header = () => {
@@ -33,7 +34,10 @@ const Header = () => {
     <div className="w-full fixed z-[9999] top-0 left-0 px-4 py-2 flex justify-between bg-orange-200 items-center">
       {/* Logo */}
       <div className="logo w-[20%] flex gap-5  justify-between ">
-        <img className="w-[30px] shrink-0 h-[30px]" src={logo} alt="Logo" />
+        <Link to="/">
+          {" "}
+          <img className="w-[30px] shrink-0 h-[30px]" src={logo} alt="Logo" />
+        </Link>
       </div>
 
       {/* Search Input */}
@@ -57,13 +61,16 @@ const Header = () => {
         {/* User Profile Dropdown */}
         <div className="profile w-auto   z-[99] relative mr-3">
           {dropdown && (
-            <div className="dropdown-menu bg-blue-500 absolute top-[100%] rounded-xl right-[20px] w-[250px] p-5  shadow-lg z-[999999]">
-              <h1 className="text-white font-bold text-xl">
-                {data?.user.name}
+            <div className="dropdown-menu bg-white absolute border-2 border-pink-500 top-[100%] rounded-xl right-[20px] w-[300px] p-5  shadow-lg z-[999999]">
+              <h1 className="text-white font-bold text-lg text-transparent  bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 gap-2">
+                <span className="flex gap-2 items-center">
+                  <FaUser className="text-blue-500" /> {data?.user.name}{" "}
+                </span>
+                <span className="text-xs">({data?.user?.role?.name})</span>
               </h1>
               <button
                 onClick={handleLogout}
-                className="mt-5 bg-white px-4 py-1 rounded-full hover:bg-blue-500 hover:text-white"
+                className="mt-5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 text-white px-4 py-1 rounded-full hover:bg-blue-500 hover:text-white"
               >
                 Logout
               </button>
