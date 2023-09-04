@@ -1,18 +1,27 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useMeQuery } from "../features/UserSlice";
-const PublicGard = () => {
-  const { data, isLoading, isError, error, isSuccess } = useMeQuery();
-  let content;
+const PublicGuard = () => {
+  const { data, isLoading, isError, isSuccess, error } = useMeQuery();
+
   if (isLoading) {
-    console.log("..loading");
+    // While loading, you can return a loading indicator or null.
+    return null; // Or return a loading spinner or message.
   }
-  if (isError) {
-    console.log(error);
-    return error && <Navigate to="/login" />;
+
+  if (error) {
+    return <Navigate to="/login" />;
   }
+
   if (isSuccess) {
-    return data?.user ? <Navigate to="/" /> : <Outlet />;
-    // return content;
+    // If the query is successful, you can check the user data and render content accordingly.
+    if (data?.user) {
+      // User is authenticated, navigate to the home page.
+      return <Navigate to="/" />;
+    } else {
+      // User is not authenticated, render the child routes using Outlet.
+      return <Outlet />;
+    }
   }
 };
-export default PublicGard;
+
+export default PublicGuard;

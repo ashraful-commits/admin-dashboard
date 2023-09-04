@@ -1,6 +1,6 @@
 import DashboardSlice from "./DashboardSlice";
-// import Cookies from "js-cookie";
-// const Token = Cookies.get("accessToken");
+import Cookies from "js-cookie";
+const Token = Cookies.get("accessToken");
 
 // Create a UserSlice using DashboardSlice.injectEndpoints
 const UserSlice = DashboardSlice.injectEndpoints({
@@ -13,9 +13,15 @@ const UserSlice = DashboardSlice.injectEndpoints({
 
     // Query to fetch user data for the authenticated user
     me: builder.query({
-      query: () => `api/v1/auth/me`,
-      credentials: "include",
+      query: () => ({
+        url: "api/v1/auth/me",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${Token}`,
+        },
+      }),
       providesTags: ["users"],
+
       invalidatesTags: ["users"], // Tags for caching
     }),
 
@@ -35,7 +41,6 @@ const UserSlice = DashboardSlice.injectEndpoints({
       query: (data) => ({
         url: "api/v1/auth/login/",
         method: "POST",
-        credentials: "include",
         body: data,
       }),
       providesTags: ["users"], // Tags for cache invalidation
@@ -47,7 +52,6 @@ const UserSlice = DashboardSlice.injectEndpoints({
       query: (id) => ({
         url: `api/v1/auth/${id}`,
         method: "DELETE",
-        credentials: "include",
       }),
       providesTags: ["users"], // Tags for cache invalidation
       invalidatesTags: ["users"], // Tags to invalidate when a user is deleted
@@ -59,7 +63,6 @@ const UserSlice = DashboardSlice.injectEndpoints({
         url: `api/v1/auth/${Id}`,
         method: "PUT",
         body: input,
-        credentials: "include",
       }),
       providesTags: ["users"], // Tags for cache invalidation
       invalidatesTags: ["users"], // Tags to invalidate when a user's data is updated
@@ -70,7 +73,7 @@ const UserSlice = DashboardSlice.injectEndpoints({
       query: ({ id, input }) => ({
         url: `api/v1/auth/${id}`,
         method: "PATCH",
-        credentials: "include",
+
         body: input,
       }),
       providesTags: ["users"], // Tags for cache invalidation

@@ -1,19 +1,22 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useMeQuery } from "../features/UserSlice";
 
-const PrivateGard = () => {
-  const { data, isLoading, isError } = useMeQuery();
+const PrivateGuard = () => {
+  const { data, isLoading, isError, error } = useMeQuery();
 
   if (isLoading) {
+    // While loading user data, you can display a loading indicator.
     return <h1>Loading...</h1>;
   }
 
-  if (isError) {
+  if (error) {
+    // If there's an error fetching user data, navigate to the login page.
     return <Navigate to="/login" />;
   }
 
   // Assuming data?.user indicates an authenticated user.
   if (!data?.user) {
+    // If the user is not authenticated, navigate to the login page.
     return <Navigate to="/login" />;
   }
 
@@ -21,4 +24,4 @@ const PrivateGard = () => {
   return <Outlet />;
 };
 
-export default PrivateGard;
+export default PrivateGuard;
