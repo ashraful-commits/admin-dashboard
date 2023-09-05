@@ -78,6 +78,15 @@ const UserSlice = DashboardSlice.injectEndpoints({
       providesTags: ["users"],
       invalidatesTags: ["users"],
     }),
+    userProfile: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `api/v1/auth/photo/${id}`,
+        method: "POST",
+        body: formData,
+      }),
+      providesTags: ["users"],
+      invalidatesTags: ["users"],
+    }),
   }),
 });
 
@@ -91,6 +100,7 @@ export const {
   useLoginUserMutation,
   useMeQuery,
   useUserLogoutMutation,
+  useUserProfileMutation,
 } = UserSlice;
 
 // Export the UserSlice for setting up Redux store
