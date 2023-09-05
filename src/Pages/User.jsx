@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal from "../Components/Model/Model";
 import swal from "sweetalert";
+import user from "../../public/user.jpg";
 import {
   useAllUsersQuery,
   useCreateUserMutation,
@@ -240,17 +241,23 @@ const User = () => {
         </Modal>
       )}
 
-      <div className="w-full flex gap-10 flex-col md:flex-row lg:flex-row lg:w-3/4 md:w-2/3 mx-auto">
-        <div className="w-full md:w-1/2 lg:w-1/3">
-          <div className="profile-container p-4 border rounded-lg mt-4 bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 text-white">
-            <h1 className="text-xl font-semibold mb-4">User Details</h1>
-            <div className="mb-2">
-              <p>
-                <strong>Name:</strong> {loginUser.user.name}
-              </p>
-              <p>
-                <strong>Email:</strong> {loginUser.user.email}
-              </p>
+      <div className="w-full flex gap-5 flex-col md:flex-col lg:flex-row lg:w-3/4 md:w-2/3 mx-auto">
+        <div className="w-full g:w-1/3">
+          <div className="profile-container p-4 border rounded-lg mt-4 bg-gradient-to-r from-orange-300 via-pink-400 to-purple-500 text-white">
+            <h1 className="text-2xl text-white my-2 font-semibold text-center mb-4">
+              User Profile
+            </h1>
+            <div className="mb-2 space-y-3 px-4">
+              <img
+                className="w-[100px] rounded-full mx-auto"
+                src={user}
+                alt=""
+              />
+              <p>{loginUser.user.name}</p>
+              <p>{loginUser.user.email}</p>
+              <button className="bg-orange-500 px-4 py-2 my-4">
+                Edit profile
+              </button>
               {/* Add more user details here */}
             </div>
             {/* You can add more colorful elements or styles as needed */}

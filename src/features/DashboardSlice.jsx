@@ -5,6 +5,7 @@ const DashboardSlice = createApi({
   // Configure the base query settings for the API requests.
   baseQuery: fetchBaseQuery({
     // baseUrl: "http://localhost:5000/", // Base URL for API requests
+    // baseUrl: "https://admin-server-inky.vercel.app/", // Base URL for API requests
     baseUrl: "https://admin-server-1.onrender.com/", // Alternate base URL
     credentials: "include", // Include credentials in requests
     withCredentials: true, // Enable cross-origin credentials
